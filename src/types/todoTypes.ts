@@ -12,3 +12,7 @@ export interface Todo {
     complete: boolean;
     todoListId: string;
 }
+
+export interface IdObject {
+    id: string | number;
+}

@@ -1,6 +1,4 @@
-import { FunctionComponent } from "react";
-
-const TodoCreatePage: FunctionComponent = () => {
+const TodoCreatePage = () => {
     return <div>TodoCreatePage</div>;
 };
 

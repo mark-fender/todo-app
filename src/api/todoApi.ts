@@ -1,36 +1,27 @@
-import axios, { AxiosPromise } from "axios";
+import axios from "axios";
 import { Todo, TodoList } from "../types/todoTypes";
 
 const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URL });
 
 // todo lists
-export const getAllTodoLists = async (): AxiosPromise<TodoList[]> => {
+export const getAllTodoLists = async (): Promise<TodoList[]> => {
     const response = await axiosInstance.get("/todoList");
     return response.data;
 };
 
-export const createTodoList = async (todoList: TodoList): AxiosPromise<void> => {
-    const response = await axiosInstance.post("/todoList", todoList);
-    return response;
+export const createTodoList = async (todoList: TodoList): Promise<void> => {
+    return await axiosInstance.post("/todoList", todoList);
 };
 
 // todos
-export const getAllTodosByListId = async (todoListId: string): AxiosPromise<Todo[]> => {
-    const response = await axiosInstance.get("/todo", { params: { todoListId } });
-    return response.data;
+export const createTodo = async (todo: Todo): Promise<void> => {
+    return await axiosInstance.post("/todo", todo);
 };
 
-export const createTodo = async (todo: Todo): AxiosPromise<void> => {
-    const response = await axiosInstance.post("/todo", todo);
-    return response;
+export const updateTodo = async (id: string, todoUpdate: Partial<Todo>): Promise<void> => {
+    return await axiosInstance.put(`/todo/${id}`, todoUpdate);
 };
 
-export const updateTodo = async (id: string, todoUpdate: Partial<Todo>): AxiosPromise<void> => {
-    const response = await axiosInstance.put(`/todo/${id}`, todoUpdate);
-    return response;
-};
-
-export const deleteTodo = async (id: string): AxiosPromise<void> => {
-    const response = await axiosInstance.delete(`/todo/${id}`);
-    return response;
+export const deleteTodo = async (id: string): Promise<void> => {
+    return await axiosInstance.delete(`/todo/${id}`);
 };

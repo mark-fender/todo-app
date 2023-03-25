@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 import { FlexBox } from "./components/styled/commons.styled";
-import { background } from "./constants/cssColors";
+import { appBackground, fontWhite } from "./constants/cssColors";
 import { CREATE_TODO_LIST_ROUTE, LIST_PAGE_ROUTE } from "./constants/routes";
-import TodoCreatePage from "./pages/TodoCreatePage";
-import TodoListPage from "./pages/TodoListPage";
+import TodoListCreatePage from "./pages/TodoCreatePage";
+import TodoListsPage from "./pages/TodoListsPage";
 
 const GlobalStyles = createGlobalStyle`
     body {
@@ -16,7 +16,10 @@ const AppLayout = styled(FlexBox)`
     position: fixed;
     width: 100%;
     height: 100%;
-    background-color: ${background};
+    justify-content: center;
+    background-color: ${appBackground};
+    color: ${fontWhite};
+    overflow-y: auto;
 `;
 
 function App() {
@@ -25,8 +28,8 @@ function App() {
             <GlobalStyles />
             <AppLayout>
                 <Routes>
-                    <Route path={LIST_PAGE_ROUTE} element={<TodoListPage />}></Route>
-                    <Route path={CREATE_TODO_LIST_ROUTE} element={<TodoCreatePage />}></Route>
+                    <Route path={LIST_PAGE_ROUTE} element={<TodoListsPage />}></Route>
+                    <Route path={CREATE_TODO_LIST_ROUTE} element={<TodoListCreatePage />}></Route>
                 </Routes>
             </AppLayout>
         </>
