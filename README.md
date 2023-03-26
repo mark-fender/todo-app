@@ -1,3 +1,6 @@
+deployment link: https://main--benevolent-marzipan-715a14.netlify.app/
+
+
 Vytvor webovú aplikáciu pre ToDo zoznamy vo frameworku React.
 
 Požadovaná funkcionalita:
