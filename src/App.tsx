@@ -31,8 +31,8 @@ function App() {
                 <Routes>
                     <Route path={"*"} element={<TodoListsPage />}></Route>
                     <Route path={LIST_PAGE_ROUTE} element={<TodoListsPage />}></Route>
-                    <Route path={CREATE_TODO_ROUTE} element={<TodoCreatePage />}></Route>
                     <Route path={CREATE_TODO_LIST_ROUTE} element={<TodoListCreatePage />}></Route>
+                    <Route path={CREATE_TODO_ROUTE} element={<TodoCreatePage />}></Route>
                 </Routes>
             </AppLayout>
         </>
