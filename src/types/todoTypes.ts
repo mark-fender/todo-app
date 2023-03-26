@@ -9,10 +9,22 @@ export interface Todo {
     name: string;
     text: string;
     deadline: number;
-    complete: boolean;
+    completed: boolean;
     todoListId: string;
 }
 
-export interface IdObject {
+export interface IDObject {
     id: string | number;
 }
+
+export interface TodoFilter {
+    name: string;
+    completed: CompletedTypes;
+}
+
+export interface FormInputProps {
+    hasError: boolean;
+}
+
+export type CompletedTypes = "ALL" | "COMPLETED" | "NOT COMPLETED";
+

@@ -42,6 +42,7 @@ const SpinnerParticle = styled.div`
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 `;
 
+// use as fallback while in loading state
 const LoadingSpinner = () => {
     return (
         <SpinnerWrapper>

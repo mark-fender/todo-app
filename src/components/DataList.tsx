@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { borderGray, fontBlack, listBackground } from "../constants/cssColors";
-import { IdObject } from "../types/todoTypes";
+import { IDObject } from "../types/todoTypes";
 import { ErrorMessage } from "./styled/commons.styled";
 
 const List = styled.ul`
@@ -24,12 +24,13 @@ const ListRow = styled.li`
     border-radius: 5px;
 `;
 
-type DataListProps<T> = {
+interface DataListProps<T> {
     data: T[] | undefined;
     renderItem: (item: T) => React.ReactNode;
-};
+}
 
-const DataList = <T extends IdObject>({ data, renderItem }: DataListProps<T>) => {
+// reusable data list for any object data type that contains id, provide a render prop to determine what to render for each item
+const DataList = <T extends IDObject>({ data, renderItem }: DataListProps<T>) => {
     return (
         <List>
             {data?.length === 0 && <ErrorMessage>No items yet</ErrorMessage>}

@@ -9,19 +9,19 @@ export const getAllTodoLists = async (): Promise<TodoList[]> => {
     return response.data;
 };
 
-export const createTodoList = async (todoList: TodoList): Promise<void> => {
+export const createTodoList = async (todoList: Partial<TodoList>): Promise<void> => {
     return await axiosInstance.post("/todoList", todoList);
 };
 
 // todos
-export const createTodo = async (todo: Todo): Promise<void> => {
-    return await axiosInstance.post("/todo", todo);
+export const createTodo = async (todo: Partial<Todo>): Promise<void> => {
+    return await axiosInstance.post(`/todoList/${todo.todoListId}/todo`, todo);
 };
 
-export const updateTodo = async (id: string, todoUpdate: Partial<Todo>): Promise<void> => {
-    return await axiosInstance.put(`/todo/${id}`, todoUpdate);
+export const updateTodo = async (todo: Todo): Promise<void> => {
+    return await axiosInstance.put(`/todoList/${todo.todoListId}/todo/${todo.id}`, todo);
 };
 
-export const deleteTodo = async (id: string): Promise<void> => {
-    return await axiosInstance.delete(`/todo/${id}`);
+export const deleteTodo = async (todo: Todo): Promise<void> => {
+    return await axiosInstance.delete(`/todoList/${todo.todoListId}/todo/${todo.id}`);
 };

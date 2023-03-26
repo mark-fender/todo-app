@@ -2,9 +2,10 @@ import { Route, Routes } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 import { FlexBox } from "./components/styled/commons.styled";
 import { appBackground, fontWhite } from "./constants/cssColors";
-import { CREATE_TODO_LIST_ROUTE, LIST_PAGE_ROUTE } from "./constants/routes";
-import TodoListCreatePage from "./pages/TodoCreatePage";
+import { CREATE_TODO_LIST_ROUTE, CREATE_TODO_ROUTE, LIST_PAGE_ROUTE } from "./constants/routes";
+import TodoListCreatePage from "./pages/TodoListCreatePage";
 import TodoListsPage from "./pages/TodoListsPage";
+import TodoCreatePage from "./pages/TodoCreatePage";
 
 const GlobalStyles = createGlobalStyle`
     body {
@@ -28,8 +29,10 @@ function App() {
             <GlobalStyles />
             <AppLayout>
                 <Routes>
+                    <Route path={"*"} element={<TodoListsPage />}></Route>
                     <Route path={LIST_PAGE_ROUTE} element={<TodoListsPage />}></Route>
                     <Route path={CREATE_TODO_LIST_ROUTE} element={<TodoListCreatePage />}></Route>
+                    <Route path={CREATE_TODO_ROUTE} element={<TodoCreatePage />}></Route>
                 </Routes>
             </AppLayout>
         </>

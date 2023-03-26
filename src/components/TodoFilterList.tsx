@@ -1,9 +1,14 @@
 import { ChangeEvent, useMemo, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Todo, TodoList } from "../types/todoTypes";
+import { deleteTodo, updateTodo } from "../api/todoApi";
+import { CREATE_TODO_ROUTE } from "../constants/routes";
+import { CompletedTypes, Todo, TodoFilter, TodoList } from "../types/todoTypes";
 import { getTimeFromTimeStamp } from "../utils/dateUtils";
 import DataList from "./DataList";
-import { ActionButton, CenteredFlexBox, ListCell, SelectInput, TextInput } from "./styled/commons.styled";
+import TodosFilter from "./TodosFilter";
+import { ActionButton, CenteredFlexBox, ListCell } from "./styled/commons.styled";
 
 const TodoListWrapper = styled(CenteredFlexBox)`
     font-size: 20px;
@@ -17,37 +22,25 @@ const TodoListName = styled(CenteredFlexBox)`
     width: 25rem;
 `;
 
-const FilterArea = styled(CenteredFlexBox)`
-    width: 100%;
-    align-items: center;
-    padding-left: 2rem;
-`;
-
-const TodoListSearchInput = styled(TextInput)`
-    width: 15rem;
-    height: 3rem;
-    margin: 1rem;
-    font-size: 20px;
-    text-indent: 5px;
-`;
-
-const TodoListSearchSelect = styled(SelectInput)`
-    width: 15rem;
-    height: 3rem;
-    margin: 1rem;
-    font-size: 20px;
-    text-indent: 5px;
-`;
-
-type TodoFilter = { name: string; completed: CompletedTypes };
-
-type CompletedTypes = "ALL" | "COMPLETED" | "NOT COMPLETED";
-
-type TodoFilterListProps = {
-    todoList: TodoList;
+const filterTodos = (filter: TodoFilter, todos: Todo[] | undefined) => {
+    return todos
+        ?.filter((todo) => (filter.name === "" ? todo : todo.name.includes(filter.name)))
+        .filter((todo) => {
+            if (filter.completed === "COMPLETED") return todo.completed;
+            if (filter.completed === "NOT COMPLETED") return !todo.completed;
+            return todo;
+        });
 };
 
+interface TodoFilterListProps {
+    todoList: TodoList;
+}
+
 const TodoFilterList = ({ todoList }: TodoFilterListProps) => {
+    const queryClient = useQueryClient();
+    
+    const navigate = useNavigate();
+
     const [filter, setFilter] = useState<TodoFilter>({ name: "", completed: "ALL" });
 
     const filteredTodos = useMemo(() => filterTodos(filter, todoList.todos), [todoList.todos, filter]);
@@ -66,17 +59,50 @@ const TodoFilterList = ({ todoList }: TodoFilterListProps) => {
         });
     };
 
+    const deleteTodoMutation = useMutation(deleteTodo, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["todoLists"]);
+        },
+        onError: (error) => {
+            console.error(error);
+        },
+    });
+
+    const handleTodoDelete = (event: React.MouseEvent<HTMLButtonElement>, todo: Todo) => {
+        event.preventDefault();
+        deleteTodoMutation.mutate(todo);
+    };
+
+    const updateTodoMutation = useMutation(updateTodo, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(["todoLists"]);
+        },
+        onError: (error) => {
+            console.error(error);
+        },
+    });
+
+    const handleTodoCompletedUpdate = (event: ChangeEvent<HTMLInputElement>, todo: Todo) => {
+        event.preventDefault();
+        updateTodoMutation.mutate({ ...todo, completed: !todo.completed });
+    };
+
+    const handleAddTodoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        navigate(`/${CREATE_TODO_ROUTE}`, { state: { listId: todoList.id } });
+    };
+
     const renderTodo = (todo: Todo) => {
         return (
             <>
                 <ListCell>
-                    Completed: <input type="checkbox" checked={todo.complete}></input>
+                    Completed: <input type="checkbox" checked={todo.completed} onChange={(event) => handleTodoCompletedUpdate(event, todo)}></input>
                 </ListCell>
                 <ListCell>Name: {todo.name}</ListCell>
                 <ListCell>Text: {todo.text}</ListCell>
                 <ListCell>Deadline: {getTimeFromTimeStamp(todo.deadline)}</ListCell>
                 <ListCell>
-                    <ActionButton>Delete</ActionButton>
+                    <ActionButton onClick={(event) => handleTodoDelete(event, todo)}>Delete</ActionButton>
                 </ListCell>
             </>
         );
@@ -87,30 +113,11 @@ const TodoFilterList = ({ todoList }: TodoFilterListProps) => {
             <TodoListName>
                 <h2>{todoList.name}</h2>
             </TodoListName>
-            <FilterArea>
-                <ActionButton>Add Todo</ActionButton>
-                <TodoListSearchInput type="text" placeholder="Name" onChange={(e) => nameFilterChangeHandler(e)} />
-                <TodoListSearchSelect onChange={(e) => completedFilterChangeHandler(e)}>
-                    <option>{"ALL"}</option>;<option>{"COMPLETED"}</option>;<option>{"NOT COMPLETED"}</option>;
-                </TodoListSearchSelect>
-            </FilterArea>
+            <ActionButton onClick={(event) => handleAddTodoClick(event)}>Add Todo</ActionButton>
+            <TodosFilter nameFilterChangeHandler={nameFilterChangeHandler} completedFilterChangeHandler={completedFilterChangeHandler} />
             <DataList data={filteredTodos} renderItem={renderTodo}></DataList>
         </TodoListWrapper>
     );
-};
-
-const filterTodos = (filter: TodoFilter, todos: Todo[] | undefined) => {
-    return todos
-        ?.filter((todo) => (filter.name === "" ? todo : todo.name.includes(filter.name)))
-        .filter((todo) => {
-            if (filter.completed === "COMPLETED") {
-                return todo.complete;
-            }
-            if (filter.completed === "NOT COMPLETED") {
-                return !todo.complete;
-            }
-            return todo;
-        });
 };
 
 export default TodoFilterList;

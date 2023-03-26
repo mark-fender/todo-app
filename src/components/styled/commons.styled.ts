@@ -1,6 +1,9 @@
 import styled from "styled-components";
-import { borderGray } from "../../constants/cssColors";
+import { borderGray, errorRed } from "../../constants/cssColors";
+import { FormInputProps } from "../../types/todoTypes";
 import { backgroundGreen, fontWhite } from "./../../constants/cssColors";
+
+//commonly used components with styling ready to be extended
 
 export const FlexBox = styled.div`
     display: flex;
@@ -24,6 +27,13 @@ export const ErrorMessage = styled(CenteredFlexBox)`
 export const PageHeading = styled.h1`
     font-size: 40px;
     font-weight: 500;
+`;
+
+export const CreatePageWrapper = styled(CenteredFlexBox)`
+    height: 100%;
+    width: 80%;
+    margin: 5rem 0;
+    flex-direction: column;
 `;
 
 export const TextInput = styled.input`
@@ -56,4 +66,33 @@ export const ActionButton = styled.button`
 export const ListCell = styled(CenteredFlexBox)`
     height: 100%;
     width: 10rem;
+`;
+
+export const Form = styled.form`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+`;
+
+export const FormContent = styled(ColumnFlexBox)`
+    width: 20rem;
+`;
+
+export const FormValidationErrorMessage = styled.span`
+    height: 1.5rem;
+    color: ${errorRed};
+`;
+
+export const FormInput = styled(TextInput)<FormInputProps>`
+    width: 13.5rem;
+    height: 3rem;
+    margin: 0.85rem;
+    font-size: 20px;
+    text-indent: 5px;
+    border-color: ${({ hasError }) => hasError && errorRed};
+
+    ::placeholder {
+        color: ${({ hasError }) => hasError && errorRed};
+    }
 `;
