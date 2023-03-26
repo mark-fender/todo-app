@@ -25,7 +25,7 @@ const TodoCreatePage = () => {
         createTodoMutation.mutate({ ...todo, completed: false, todoListId: state.listId });
     };
 
-    if (!state.listId) return <Navigate replace to={LIST_PAGE_ROUTE}></Navigate>;
+    if (!state?.listId) return <Navigate replace to={`/${LIST_PAGE_ROUTE}`}></Navigate>;
 
     return (
         <CreatePageWrapper>
