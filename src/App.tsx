@@ -3,9 +3,9 @@ import styled, { createGlobalStyle } from "styled-components";
 import { FlexBox } from "./components/styled/commons.styled";
 import { appBackground, fontWhite } from "./constants/cssColors";
 import { CREATE_TODO_LIST_ROUTE, CREATE_TODO_ROUTE, LIST_PAGE_ROUTE } from "./constants/routes";
+import TodoCreatePage from "./pages/TodoCreatePage";
 import TodoListCreatePage from "./pages/TodoListCreatePage";
 import TodoListsPage from "./pages/TodoListsPage";
-import TodoCreatePage from "./pages/TodoCreatePage";
 
 const GlobalStyles = createGlobalStyle`
     body {
