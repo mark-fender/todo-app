@@ -20,7 +20,7 @@ const TodoListsPage = () => {
 
     const handleAddTodoListClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        navigate(`/${CREATE_TODO_LIST_ROUTE}`);
+        navigate(CREATE_TODO_LIST_ROUTE);
     };
 
     return (
